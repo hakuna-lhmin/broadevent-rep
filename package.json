@@ -1,0 +1,8 @@
+{
+  "name": "broadevent-firebase",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm --prefix broadevent ci",
+    "build": "npm --prefix broadevent run build && rm -rf dist && cp -R broadevent/dist dist"
+  }
+}
