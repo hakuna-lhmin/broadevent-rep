@@ -11,11 +11,12 @@ interface Props {
   reportType: 'seminar' | 'exhibition'
   reportTitle: string
   finalReportContent: string
+  finalReportFileName: string
   titleFontSize: number
   subtitleFontSize: number
   bodyFontSize: number
   totalPages: number
-  onRevised: (content: string) => void
+  onRevised: (content: string, fileName: string) => void
 }
 
 export default function ReportRevisionPanel({
@@ -23,6 +24,7 @@ export default function ReportRevisionPanel({
   reportType,
   reportTitle,
   finalReportContent,
+  finalReportFileName,
   titleFontSize,
   subtitleFontSize,
   bodyFontSize,
@@ -72,14 +74,14 @@ export default function ReportRevisionPanel({
         bodyFontSize,
         totalPages,
       })
-      await generateAndDownloadReport({
+      const fileName = await generateAndDownloadReport({
         title: `${reportTitle} 수정본`,
         content: revised,
         titleFontSize,
         subtitleFontSize,
         bodyFontSize,
       })
-      onRevised(revised)
+      onRevised(revised, fileName)
       toast.success('보고서를 재작성하여 다운로드했습니다.')
     } catch (e) {
       toast.error('보고서 재작성 실패: ' + (e instanceof Error ? e.message : '알 수 없는 오류'))
@@ -104,6 +106,11 @@ export default function ReportRevisionPanel({
         />
         <CheckSquare className="w-4 h-4 text-gray-400" />
         작성된 최종 보고서
+        {finalReportFileName && (
+          <span className="min-w-0 break-all text-xs font-normal text-gray-500">
+            {finalReportFileName}
+          </span>
+        )}
       </label>
 
       <div>

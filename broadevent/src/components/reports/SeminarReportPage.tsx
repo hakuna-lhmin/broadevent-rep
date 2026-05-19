@@ -30,6 +30,7 @@ export default function SeminarReportPage() {
   const [generating, setGenerating] = useState(false)
   const [uploading,  setUploading]  = useState(false)
   const [finalReportContent, setFinalReportContent] = useState('')
+  const [finalReportFileName, setFinalReportFileName] = useState('')
 
   // event가 로드된 후 state 초기화
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function SeminarReportPage() {
         totalPages:            volume.totalPages,
         customRequirements:    volume.useCustomRequirements ? volume.customRequirements : '',
       })
-      await generateAndDownloadReport({
+      const fileName = await generateAndDownloadReport({
         title:            `${eventName} — 세미나 결과 보고서`,
         content,
         titleFontSize:    volume.titleFontSize,
@@ -94,6 +95,7 @@ export default function SeminarReportPage() {
         bodyFontSize:     volume.bodyFontSize,
       })
       setFinalReportContent(content)
+      setFinalReportFileName(fileName)
       updateEvent(eventId, {
         seminarReport: {
           eventName, homepageDescUrl: homeUrl, photos,
@@ -197,11 +199,15 @@ export default function SeminarReportPage() {
           reportType="seminar"
           reportTitle={`${eventName} — 세미나 결과 보고서`}
           finalReportContent={finalReportContent}
+          finalReportFileName={finalReportFileName}
           titleFontSize={volume.titleFontSize}
           subtitleFontSize={volume.subtitleFontSize}
           bodyFontSize={volume.bodyFontSize}
           totalPages={volume.totalPages}
-          onRevised={setFinalReportContent}
+          onRevised={(content, fileName) => {
+            setFinalReportContent(content)
+            setFinalReportFileName(fileName)
+          }}
         />
       </div>
     </div>

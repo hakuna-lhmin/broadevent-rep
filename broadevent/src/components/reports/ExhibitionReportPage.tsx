@@ -35,6 +35,7 @@ export default function ExhibitionReportPage() {
   const [generating,  setGenerating]  = useState(false)
   const [uploadingId, setUploadingId] = useState<string | null>(null)
   const [finalReportContent, setFinalReportContent] = useState('')
+  const [finalReportFileName, setFinalReportFileName] = useState('')
 
   // event 로드 후 state 초기화
   useEffect(() => {
@@ -96,7 +97,7 @@ export default function ExhibitionReportPage() {
         totalPages:       volume.totalPages,
         customRequirements: volume.useCustomRequirements ? volume.customRequirements : '',
       })
-      await generateAndDownloadReport({
+      const fileName = await generateAndDownloadReport({
         title:            `${eventName} — 전시회 결과 보고서`,
         content,
         titleFontSize:    volume.titleFontSize,
@@ -104,6 +105,7 @@ export default function ExhibitionReportPage() {
         bodyFontSize:     volume.bodyFontSize,
       })
       setFinalReportContent(content)
+      setFinalReportFileName(fileName)
       updateEvent(eventId, {
         exhibitionReport: {
           eventName, homepageDescUrl: homeUrl,
@@ -245,11 +247,15 @@ export default function ExhibitionReportPage() {
           reportType="exhibition"
           reportTitle={`${eventName} — 전시회 결과 보고서`}
           finalReportContent={finalReportContent}
+          finalReportFileName={finalReportFileName}
           titleFontSize={volume.titleFontSize}
           subtitleFontSize={volume.subtitleFontSize}
           bodyFontSize={volume.bodyFontSize}
           totalPages={volume.totalPages}
-          onRevised={setFinalReportContent}
+          onRevised={(content, fileName) => {
+            setFinalReportContent(content)
+            setFinalReportFileName(fileName)
+          }}
         />
       </div>
     </div>

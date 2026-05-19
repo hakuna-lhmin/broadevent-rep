@@ -74,7 +74,7 @@ function metaRow(label: string, value: string): TableRow {
   return new TableRow({ children: [mkCell(label, 'D9E2F3'), mkCell(value)] })
 }
 
-export async function generateAndDownloadReport(config: ReportConfig): Promise<void> {
+export async function generateAndDownloadReport(config: ReportConfig): Promise<string> {
   const { title, content, titleFontSize: tfs, subtitleFontSize: sfs, bodyFontSize: bfs } = config
 
   const doc = new Document({
@@ -144,5 +144,7 @@ export async function generateAndDownloadReport(config: ReportConfig): Promise<v
 
   const blob = await Packer.toBlob(doc)
   const safeName = title.replace(/[^\w가-힣\s\-]/g, '').slice(0, 60).trim().replace(/\s+/g, '_')
-  saveAs(blob, `${safeName}.docx`)
+  const fileName = `${safeName}.docx`
+  saveAs(blob, fileName)
+  return fileName
 }
