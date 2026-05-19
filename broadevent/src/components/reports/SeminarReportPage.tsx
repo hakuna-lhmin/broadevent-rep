@@ -10,6 +10,7 @@ import { uploadFile } from '@/lib/storageHelpers'
 import { toast } from '@/components/shared/Toast'
 import FileDropzone from '@/components/shared/FileDropzone'
 import { VolumeSettingsForm, DEFAULT_VOLUME, EditableField } from './ReportFormShared'
+import ReportRevisionPanel from './ReportRevisionPanel'
 import type { EventFile } from '@/types'
 import type { VolumeSettings } from './ReportFormShared'
 
@@ -28,6 +29,7 @@ export default function SeminarReportPage() {
   const [volume,     setVolume]     = useState<VolumeSettings>(DEFAULT_VOLUME)
   const [generating, setGenerating] = useState(false)
   const [uploading,  setUploading]  = useState(false)
+  const [finalReportContent, setFinalReportContent] = useState('')
 
   // event가 로드된 후 state 초기화
   useEffect(() => {
@@ -91,6 +93,7 @@ export default function SeminarReportPage() {
         subtitleFontSize: volume.subtitleFontSize,
         bodyFontSize:     volume.bodyFontSize,
       })
+      setFinalReportContent(content)
       updateEvent(eventId, {
         seminarReport: {
           eventName, homepageDescUrl: homeUrl, photos,
@@ -188,6 +191,18 @@ export default function SeminarReportPage() {
             ? <><Loader className="w-4 h-4 animate-spin" /> AI로 보고서를 작성하는 중…</>
             : <><FileDown className="w-4 h-4" /> 보고서 작성 및 .docx 다운로드</>}
         </button>
+
+        <ReportRevisionPanel
+          eventName={eventName}
+          reportType="seminar"
+          reportTitle={`${eventName} — 세미나 결과 보고서`}
+          finalReportContent={finalReportContent}
+          titleFontSize={volume.titleFontSize}
+          subtitleFontSize={volume.subtitleFontSize}
+          bodyFontSize={volume.bodyFontSize}
+          totalPages={volume.totalPages}
+          onRevised={setFinalReportContent}
+        />
       </div>
     </div>
   )

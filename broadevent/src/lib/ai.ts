@@ -368,3 +368,33 @@ ${boothList}
 총평: ${params.overallComments || '없음'}` },
   ], { useWebSearch: true, maxTokens: tokensNeeded })
 }
+
+// ⑥ 기존 보고서 재작성
+export async function reviseReport(params: {
+  eventName: string
+  reportType: 'seminar' | 'exhibition'
+  originalContent: string
+  modificationRequirements: string
+  titleFontSize: number
+  subtitleFontSize: number
+  bodyFontSize: number
+  totalPages: number
+}): Promise<string> {
+  const tokensForPages = Math.min(params.totalPages * 900, 6000)
+  const reportTypeLabel = params.reportType === 'seminar' ? '세미나 결과 보고서' : '전시회 결과 보고서'
+
+  return callAI([
+    { role: 'system', content: `한국 방송사 보고서 편집자. 사용자가 제공한 기존 ${reportTypeLabel}를 바탕으로 수정 요구 사항을 적극 반영해 한국어 보고서 전체를 다시 작성하라.
+기존 보고서의 핵심 사실과 구조는 유지하되, 요구 사항이 있으면 문장, 구성, 강조점, 누락 보완, 축약/확장, 톤 조정까지 능동적으로 반영한다.
+출력은 수정된 최종 보고서 본문만 작성한다. 설명, 변경 요약, 메타 코멘트는 쓰지 않는다.
+형식: ## 헤딩 사용 / 제목 ${params.titleFontSize}pt / 소제목 ${params.subtitleFontSize}pt / 본문 ${params.bodyFontSize}pt / 목표 ${params.totalPages}p` },
+    { role: 'user', content: `행사: "${params.eventName}"
+보고서 유형: ${reportTypeLabel}
+
+[기존 보고서]
+${params.originalContent}
+
+[수정 요구 사항]
+${params.modificationRequirements || '제공된 기존 보고서를 더 자연스럽고 전문적인 최종본으로 다듬어라.'}` },
+  ], { useWebSearch: false, maxTokens: tokensForPages })
+}
