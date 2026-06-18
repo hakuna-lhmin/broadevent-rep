@@ -19,7 +19,7 @@ export type AiProvider = 'codex' | 'claude' | 'worker'
 // ── 무료 한도 최적화: 기본 모델을 gpt-4o-mini로 변경 ──────────────────────
 const MODEL_DEFAULTS: Record<AiProvider, string> = {
   codex:  'gpt-4o-mini',   // ← 변경: gpt-4o → gpt-4o-mini (비용 약 20분의 1)
-  claude: 'claude-haiku-4-5',  // ← 변경: Sonnet → Haiku (저비용)
+  claude: 'claude-haiku-4-5-20251001',  // ← 변경: Sonnet → Haiku (저비용)
   worker: 'gpt-4o-mini',
 }
 

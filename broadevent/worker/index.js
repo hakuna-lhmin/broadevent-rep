@@ -45,7 +45,7 @@ export default {
       if (url.pathname === '/ai') {
         const body = await request.json()
         const { messages, useWebSearch, maxTokens, model } = body
-        const finalModel = model || env.AI_MODEL || (provider === 'claude' ? 'claude-sonnet-4-20250514' : 'gpt-4o')
+        const finalModel = model || env.AI_MODEL || (provider === 'claude' ? 'claude-sonnet-4-6' : 'gpt-4o')
 
         let text
         if (provider === 'claude') {
@@ -59,7 +59,7 @@ export default {
       if (url.pathname === '/ai/vision') {
         const body = await request.json()
         const { base64, mimeType, systemPrompt } = body
-        const finalModel = env.AI_MODEL || (provider === 'claude' ? 'claude-sonnet-4-20250514' : 'gpt-4o')
+        const finalModel = env.AI_MODEL || (provider === 'claude' ? 'claude-sonnet-4-6' : 'gpt-4o')
         let text
         if (provider === 'claude') {
           text = await callClaudeVision(env.CLAUDE_API_KEY, finalModel, base64, mimeType, systemPrompt)

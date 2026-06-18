@@ -19,7 +19,7 @@ const MODEL_PRESETS: Record<AiProvider, { model: string; label: string; cost: st
   ],
   claude: [
     { model: 'claude-haiku-4-5-20251001',   label: 'Claude Haiku',   cost: '저렴 ★ 무료한도 적합' },
-    { model: 'claude-sonnet-4-20250514',    label: 'Claude Sonnet',  cost: '중간 (유료)' },
+    { model: 'claude-sonnet-4-6',           label: 'Claude Sonnet',  cost: '중간 (유료)' },
   ],
   worker: [
     { model: 'gpt-4o-mini', label: 'GPT-4o Mini (Worker)', cost: '서버에서 처리' },
